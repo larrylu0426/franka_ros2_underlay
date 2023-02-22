@@ -55,6 +55,20 @@ def generate_launch_description():
         'db', default_value='False', description='Database flag'
     )
 
+    robot_arg = DeclareLaunchArgument(
+        robot_ip_parameter_name,
+        description='Hostname or IP address of the robot.')
+
+    use_fake_hardware_arg = DeclareLaunchArgument(
+        use_fake_hardware_parameter_name,
+        default_value='false',
+        description='Use fake hardware')
+    fake_sensor_commands_arg = DeclareLaunchArgument(
+        fake_sensor_commands_parameter_name,
+        default_value='false',
+        description="Fake sensor commands. Only valid when '{}' is true".format(
+            use_fake_hardware_parameter_name))
+
     # planning_context
     franka_xacro_file = os.path.join(get_package_share_directory('franka_description'), 'robots',
                                      'panda_arm.urdf.xacro')
@@ -137,24 +151,6 @@ def generate_launch_description():
         ],
     )
 
-    # RViz
-    rviz_base = os.path.join(get_package_share_directory('franka_moveit_config'), 'rviz')
-    rviz_full_config = os.path.join(rviz_base, 'moveit.rviz')
-
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        arguments=['-d', rviz_full_config],
-        parameters=[
-            robot_description,
-            robot_description_semantic,
-            ompl_planning_pipeline_config,
-            kinematics_yaml,
-        ],
-    )
-
     # Publish TF
     robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -213,19 +209,7 @@ def generate_launch_description():
         parameters=[
             {'source_list': ['franka/joint_states', 'panda_gripper/joint_states'], 'rate': 30}],
     )
-    robot_arg = DeclareLaunchArgument(
-        robot_ip_parameter_name,
-        description='Hostname or IP address of the robot.')
 
-    use_fake_hardware_arg = DeclareLaunchArgument(
-        use_fake_hardware_parameter_name,
-        default_value='false',
-        description='Use fake hardware')
-    fake_sensor_commands_arg = DeclareLaunchArgument(
-        fake_sensor_commands_parameter_name,
-        default_value='false',
-        description="Fake sensor commands. Only valid when '{}' is true".format(
-            use_fake_hardware_parameter_name))
     gripper_launch_file = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([PathJoinSubstitution(
             [FindPackageShare('franka_gripper'), 'launch', 'gripper.launch.py'])]),
@@ -237,7 +221,6 @@ def generate_launch_description():
          use_fake_hardware_arg,
          fake_sensor_commands_arg,
          db_arg,
-         rviz_node,
          robot_state_publisher,
          run_move_group_node,
          ros2_control_node,
