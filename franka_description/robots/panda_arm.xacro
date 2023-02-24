@@ -17,21 +17,9 @@
         </geometry>
       </visual>
       <collision>
-        <origin xyz="-0.075 0 0.06" rpy="0 ${pi/2} 0"/>
+        <origin xyz="-0.075 0 0.05" rpy="0 0 0"/>
         <geometry>
-          <cylinder radius="${0.06+safety_distance}" length="0.03" />
-        </geometry>
-      </collision>
-      <collision>
-        <origin xyz="-0.06 0 0.06" rpy="0 0 0"/>
-        <geometry>
-          <sphere radius="${0.06+safety_distance}" />
-        </geometry>
-      </collision>
-      <collision>
-        <origin xyz="-0.09 0 0.06" rpy="0 0 0"/>
-        <geometry>
-          <sphere radius="${0.06+safety_distance}" />
+          <cylinder radius="${0.06+safety_distance}" length="0.10" />
         </geometry>
       </collision>
     </link>
@@ -45,12 +33,6 @@
         <origin xyz="0 0 -0.1915" rpy="0 0 0"/>
         <geometry>
           <cylinder radius="${0.06+safety_distance}" length="0.2830" />
-        </geometry>
-      </collision>
-      <collision>
-        <origin xyz="0 0 -0.333" rpy="0 0 0"/>
-        <geometry>
-          <sphere radius="${0.06+safety_distance}" />
         </geometry>
       </collision>
       <collision>
